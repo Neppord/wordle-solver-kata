@@ -37,7 +37,7 @@ fun green(char: Char) = Cell(Color.GREEN, char)
 fun mustContain(char: Char): (Char) -> Boolean = { char == it }
 fun mustNotContain(char: Char): (Char) -> Boolean = { char != it }
 fun checkCellConstraintForCell(cell: Cell): (Char) -> Boolean = TODO()
-//val checkCellConstraintsForWord: (Vec5<Cell>) -> (Vec5<Char>) -> Boolean = TODO()
+fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
 
 fun atLeast(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
 fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
