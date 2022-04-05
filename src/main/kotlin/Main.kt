@@ -34,11 +34,10 @@ fun grey(char: Char) = Cell(Color.GREY, char)
 fun green(char: Char) = Cell(Color.GREEN, char)
 
 // Filter rules for Wordle
-fun mustContain(char: Char): (Char) -> Boolean =  TODO()
-fun mustNotContain(char: Char): (Char) -> Boolean =  TODO()
-val checkCellConstraintForCell: (Cell) -> (Char) -> Boolean = TODO()
-val checkCellConstraintsForWord: (Vec5<Cell>) -> (Vec5<Char>) -> Boolean =
-    TODO()
+fun mustContain(char: Char): (Char) -> Boolean = { char == it }
+fun mustNotContain(char: Char): (Char) -> Boolean = { char != it }
+fun checkCellConstraintForCell(cell: Cell): (Char) -> Boolean = TODO()
+//val checkCellConstraintsForWord: (Vec5<Cell>) -> (Vec5<Char>) -> Boolean = TODO()
 
 fun atLeast(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
 fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
@@ -49,7 +48,11 @@ fun checkAmountConstraint(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
 fun <A> ((A) -> Boolean).and(other: (A) -> Boolean): (A) -> Boolean = TODO()
 
 fun main(args: Array<String>) {
-    val words = File("words.txt").readLines()
+    val words:List<Vec5<Char>> = File("words.txt")
+        .readLines()
+        .map {
+            Vec5(it[0], it[1], it[2], it[3], it[4])
+        }
     val clue =
-        Vec5(yellow('S'), yellow('L'), yellow('A'), yellow('T'), yellow('E'))
+        Vec5(grey('S'), yellow('L'), yellow('A'), yellow('T'), grey('E'))
 }
