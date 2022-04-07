@@ -3,7 +3,12 @@ import java.io.File
 // Filter rules for Wordle
 fun mustContain(char: Char): (Char) -> Boolean = { char == it }
 fun mustNotContain(char: Char): (Char) -> Boolean = { char != it }
-fun checkCellConstraintForCell(cell: Cell): (Char) -> Boolean = TODO()
+fun checkCellConstraintForCell(cell: Cell): (Char) -> Boolean =
+    when (cell.color) {
+        Color.GREEN -> mustContain(cell.char)
+        Color.YELLOW, Color.GREY -> mustNotContain(cell.char)
+    }
+
 fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
 
 fun atLeast(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
@@ -19,7 +24,7 @@ fun grey(char: Char) = Cell(Color.GREY, char)
 fun green(char: Char) = Cell(Color.GREEN, char)
 
 fun main(args: Array<String>) {
-    val words:List<Vec5<Char>> = File("words.txt")
+    val words: List<Vec5<Char>> = File("words.txt")
         .readLines()
         .map {
             Vec5(it[0], it[1], it[2], it[3], it[4])
