@@ -1,0 +1,1 @@
+data class Cell(val color: Color, val char: Char)
