@@ -19,4 +19,6 @@ data class Vec5<A>(
     )
 
     fun asList() = listOf(item1, item2, item3, item4, item5)
+    
+    fun reduce(f:(A, A) -> A) = asList().reduce(f)
 }
