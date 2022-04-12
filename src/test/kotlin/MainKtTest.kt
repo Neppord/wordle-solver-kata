@@ -24,4 +24,20 @@ class MainKtTest {
         assertEquals(false, yellowChecker('S'))
         assertEquals(true, yellowChecker('Y'))
     }
+
+    @Test
+    internal fun checkCellForWord() {
+        val clue = Vec5(green('S'))
+        val word = Vec5('S')
+        val actual = checkCellConstraintsForWord(clue)(word)
+        assertEquals(true, actual)
+    }
+
+    @Test
+    internal fun checkCellForWordFalse() {
+        val clue = Vec5(grey('S'))
+        val word = Vec5('S')
+        val actual = checkCellConstraintsForWord(clue)(word)
+        assertEquals(false, actual)
+    }
 }

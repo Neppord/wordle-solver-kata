@@ -4,8 +4,10 @@ import java.io.File
 fun mustContain(char: Char): (Char) -> Boolean = { char == it }
 fun mustNotContain(char: Char): (Char) -> Boolean = { char != it }
 
-fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
-
+fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = 
+    { val cell = clue.item1
+        val char = it.item1
+        cell.checkCellConstraint()(char) }
 fun atLeast(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
 fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
 
