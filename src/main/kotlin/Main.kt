@@ -3,11 +3,6 @@ import java.io.File
 // Filter rules for Wordle
 fun mustContain(char: Char): (Char) -> Boolean = { char == it }
 fun mustNotContain(char: Char): (Char) -> Boolean = { char != it }
-fun checkCellConstraintForCell(cell: Cell): (Char) -> Boolean =
-    when (cell.color) {
-        Color.GREEN -> mustContain(cell.char)
-        Color.YELLOW, Color.GREY -> mustNotContain(cell.char)
-    }
 
 fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
 

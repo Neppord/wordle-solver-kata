@@ -13,13 +13,14 @@ class MainKtTest {
         assertEquals(false, mustNotContain('S')('S'))
         assertEquals(true, mustNotContain('Y')('S'))
     }
-    
+
     @Test
     fun checkCellConstraintForCell() {
-        val checker: (Char) -> Boolean = checkCellConstraintForCell(green('S'))
+        val checker: (Char) -> Boolean = green('S').checkCellConstraint()
         assertEquals(true, checker('S'))
         assertEquals(false, checker('Y'))
-        val yellowChecker: (Char) -> Boolean = checkCellConstraintForCell(yellow('S'))
+        val yellowChecker: (Char) -> Boolean =
+            yellow('S').checkCellConstraint()
         assertEquals(false, yellowChecker('S'))
         assertEquals(true, yellowChecker('Y'))
     }
