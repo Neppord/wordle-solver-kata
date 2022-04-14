@@ -40,4 +40,33 @@ class MainKtTest {
         val actual = checkCellConstraintsForWord(clue)(word)
         assertEquals(false, actual)
     }
+    
+    @Test
+    internal fun checkCellForWordDifferentCells() {
+        val clue = Vec5(green('S'), green('Y'), green('S'), green('S'), green('S'))
+        val word = Vec5('S')
+        val actual = checkCellConstraintsForWord(clue)(word)
+        assertEquals(false, actual)
+    }
+
+    @Test
+    internal fun checkAtleastACharacterPresent() {
+        val word = Vec5('S')
+        val actual = atLeast('S', 1)(word)
+        assertEquals(true, actual)
+    }
+
+    @Test
+    fun checkCharacterNotPresent() {
+        val word = Vec5('A')
+        val actual = atLeast('S', 1)(word)
+        assertEquals(false, actual)
+    }
+
+    @Test
+    fun checkCharacterNotPresentAmount() {
+        val word = Vec5('S', 'A', 'A', 'A', 'A')
+        val actual = atLeast('S', 1)(word)
+        assertEquals(true, actual)
+    }
 }
