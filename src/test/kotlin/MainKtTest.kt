@@ -69,4 +69,44 @@ class MainKtTest {
         val actual = atLeast('S', 1)(word)
         assertEquals(true, actual)
     }
+    
+    @Test
+    fun checkCharacterNotPresentAmount2() {
+        val word = Vec5('S', 'A', 'A', 'A', 'A')
+        val actual = atLeast('S', 2)(word)
+        assertEquals(false, actual)
+    }
+
+    @Test
+    fun checkCharacterLessThan1() {
+        val word = Vec5('S')
+        val actual = lessThan('A', 1)(word)
+        assertEquals(true, actual)
+    }
+
+    @Test
+    fun checkCharacterNotLessThan1() {
+        val word = Vec5('S')
+        val actual = lessThan('S', 1)(word)
+        assertEquals(false, actual)
+    }
+    
+    @Test
+    fun checkCharacterLessThan2() {
+        val word = Vec5('S', 'A', 'A', 'A', 'A')
+        val actual = lessThan('S', 2)(word)
+        assertEquals(true, actual)
+    }
+    
+    //@Test
+    fun checkInnerAmount(){
+        val clueWord = Vec5('S')
+        val guessWord = Vec5('S')
+        val cell = grey('S')
+        val checker =
+            checkInnerAmountConstraint(cell, clueWord)
+        val actual = checker(guessWord)
+        assertEquals(false, actual)
+        
+    }
 }

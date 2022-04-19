@@ -19,10 +19,15 @@ fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean =
 // atLeast('S', 1)(Vec5('P', 'L', 'A', 'T', 'E')) == false
 fun atLeast(char: Char, amount: Int): (Vec5<Char>) -> Boolean =
     { word ->
-        char in word.asList()
+        word.asList().count { it == char } >= amount
     }
 
-fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = TODO()
+fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = { word ->
+    word.asList().count { it == char } < amount
+}
+
+fun checkInnerAmountConstraint(cell: Cell, clueWord: Vec5<Char>):
+        (Vec5<Char>) -> Boolean = TODO()
 
 fun checkAmountConstraint(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
 
