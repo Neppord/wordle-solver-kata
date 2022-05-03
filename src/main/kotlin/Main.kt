@@ -26,10 +26,21 @@ fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = { word ->
     word.asList().count { it == char } < amount
 }
 
-fun checkInnerAmountConstraint(cell: Cell, clueWord: Vec5<Char>):
-        (Vec5<Char>) -> Boolean = TODO()
+fun frequency(of:Char, inside: Vec5<Char>): Int = 
+    inside.asList().count { it == of }
 
-fun checkAmountConstraint(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean = TODO()
+
+fun checkPerCellWordConstraint(cell: Cell, clueWord: Vec5<Char>):
+        (Vec5<Char>) -> Boolean = when (cell.color) {
+            Color.GREEN, Color.YELLOW -> atLeast(cell.char, frequency(cell.char, clueWord))
+            Color.GREY -> lessThan(cell.char, frequency(cell.char, clueWord))
+}
+
+fun checkWordConstraint(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean {
+    val clueWord: Vec5<Char> = clue.map { cell -> cell.char }
+    return clue.map { checkPerCellWordConstraint(it, clueWord) }
+        .reduce { a, b -> a + b}
+}
 
 // utility method
 operator fun <A> ((A) -> Boolean).plus(other: (A) -> Boolean): (A) -> Boolean =
@@ -42,15 +53,17 @@ fun green(char: Char) = Cell(Color.GREEN, char)
 
 typealias Clue = Vec5<Cell>
 
-val makeRuleFromClue: (clue: Clue) -> (Vec5<Char>) -> Boolean =
-    ::checkCellConstraintsForWord
+fun makeRuleFromClue(clue: Clue): (Vec5<Char>) -> Boolean =
+    checkCellConstraintsForWord(clue) + checkWordConstraint(clue)
 
 fun makeRulesFromClues(clues: List<Clue>): (Vec5<Char>) -> Boolean = clues
-    .map(makeRuleFromClue)
+    .map(::makeRuleFromClue)
     .reduce { a, b -> a.plus(b) }
 
 val clues: List<Clue> = listOf(
-    Vec5(yellow('S'), grey('L'), grey('A'), grey('T'), yellow('E')),
+    Vec5(grey('S'), grey('L'), yellow('A'), grey('T'), grey('E')),
+    Vec5(grey('P'), green('A'), grey('G'), green('R'), yellow('I')),
+    Vec5(grey('D'), green('A'), green('I'), green('R'), green('Y')),
 )
 
 fun main(args: Array<String>) {

@@ -8,6 +8,7 @@ class MainKtTest {
         assertEquals(true, mustContain('S')('S'))
         assertEquals(false, mustContain('Y')('Z'))
     }
+
     @Test
     fun mustNotContain() {
         assertEquals(false, mustNotContain('S')('S'))
@@ -40,10 +41,11 @@ class MainKtTest {
         val actual = checkCellConstraintsForWord(clue)(word)
         assertEquals(false, actual)
     }
-    
+
     @Test
     internal fun checkCellForWordDifferentCells() {
-        val clue = Vec5(green('S'), green('Y'), green('S'), green('S'), green('S'))
+        val clue =
+            Vec5(green('S'), green('Y'), green('S'), green('S'), green('S'))
         val word = Vec5('S')
         val actual = checkCellConstraintsForWord(clue)(word)
         assertEquals(false, actual)
@@ -69,7 +71,7 @@ class MainKtTest {
         val actual = atLeast('S', 1)(word)
         assertEquals(true, actual)
     }
-    
+
     @Test
     fun checkCharacterNotPresentAmount2() {
         val word = Vec5('S', 'A', 'A', 'A', 'A')
@@ -90,23 +92,55 @@ class MainKtTest {
         val actual = lessThan('S', 1)(word)
         assertEquals(false, actual)
     }
-    
+
     @Test
     fun checkCharacterLessThan2() {
         val word = Vec5('S', 'A', 'A', 'A', 'A')
         val actual = lessThan('S', 2)(word)
         assertEquals(true, actual)
     }
-    
-    //@Test
-    fun checkInnerAmount(){
-        val clueWord = Vec5('S')
-        val guessWord = Vec5('S')
-        val cell = grey('S')
-        val checker =
-            checkInnerAmountConstraint(cell, clueWord)
-        val actual = checker(guessWord)
-        assertEquals(false, actual)
-        
+
+    @Test
+    fun checkFrequency() {
+        assertEquals(0, frequency('R', Vec5('S')))
+        assertEquals(1, frequency('S', Vec5('S', 'R', 'R', 'R', 'R')))
+        assertEquals(2, frequency('S', Vec5('R', 'S', 'S', 'R', 'R')))
+        assertEquals(5, frequency('S', Vec5('S')))
+    }
+
+    @Test
+    internal fun perCellWordConstraintPassAllSss() {
+        val greenS = green('S')
+        val word: Vec5<Char> = Vec5('S')
+        val check: (Vec5<Char>) -> Boolean =
+            checkPerCellWordConstraint(greenS, word)
+        assertEquals(true, check(word))
+    }
+    @Test
+    internal fun perCellWordConstraintFailToFewSsss() {
+        val greenS = green('S')
+        val clueWord: Vec5<Char> = Vec5('S')
+        val guessWord: Vec5<Char> = Vec5('S', 'R', 'R', 'R', 'R')
+        val check: (Vec5<Char>) -> Boolean =
+            checkPerCellWordConstraint(greenS, clueWord)
+        assertEquals(false, check(guessWord))
+    }  
+    @Test
+    internal fun perCellWordConstraintDifferentWordsButtPasses() {
+        val greenS = green('S')
+        val clueWord: Vec5<Char> = Vec5('S', 'W', 'R', 'R', 'R')
+        val guessWord: Vec5<Char> = Vec5('S', 'R', 'R', 'R', 'R')
+        val check: (Vec5<Char>) -> Boolean =
+            checkPerCellWordConstraint(greenS, clueWord)
+        assertEquals(true, check(guessWord))
+    }
+    @Test
+    internal fun perCellWordConstraintGrayCell() {
+        val greenS = grey('S')
+        val clueWord: Vec5<Char> = Vec5('S', 'W', 'R', 'R', 'R')
+        val guessWord: Vec5<Char> = Vec5('S', 'R', 'R', 'R', 'R')
+        val check: (Vec5<Char>) -> Boolean =
+            checkPerCellWordConstraint(greenS, clueWord)
+        assertEquals(false, check(guessWord))
     }
 }
