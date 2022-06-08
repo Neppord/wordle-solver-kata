@@ -1,10 +1,12 @@
 import java.io.File
 
 // Filter rules for Wordle
-fun mustContain(char: Char): (Char) -> Boolean = 
-    TODO("Start Here after fixing the TODO in Main")
-fun mustNotContain(char: Char): (Char) -> Boolean = TODO()
+fun mustContain(char: Char): (Char) -> Boolean =
+    { c -> c == char }
 
+fun mustNotContain(char: Char): (Char) -> Boolean =
+    { c -> c != char }
+ 
 fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean =
     TODO()
 
@@ -52,7 +54,7 @@ fun main(args: Array<String>) {
     val words: List<Vec5<Char>> = File("words.txt")
         .readLines()
         .map(String::uppercase)
-        .map { TODO("Start Here") }
+        .map { word -> Vec5(word[0], word[1], word[2], word[3], word[4]) }
 
 
     val rules: (Vec5<Char>) -> Boolean = makeRulesFromClues(clues)

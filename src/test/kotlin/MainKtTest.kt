@@ -8,4 +8,10 @@ class MainKtTest {
         assertEquals(true, mustContain('S')('S'))
         assertEquals(false, mustContain('Y')('Z'))
     }
+
+    @Test
+    fun mustNotContain() {
+        assertEquals(false, mustNotContain('S')('S'))
+        assertEquals(true, mustNotContain('Y')('Z'))
+    }
 }
