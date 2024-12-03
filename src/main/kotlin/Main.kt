@@ -66,7 +66,7 @@ val clues: List<Clue> = listOf(
     Vec5(grey('D'), green('A'), green('I'), green('R'), green('Y')),
 )
 
-fun main(args: Array<String>) {
+fun main() {
     val words: List<Vec5<Char>> = File("words.txt")
         .readLines()
         .map(String::uppercase)
