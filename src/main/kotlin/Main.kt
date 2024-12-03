@@ -1,64 +1,55 @@
 import java.io.File
 
+
+typealias Clue = Vec5<Cell>
+typealias Word = Vec5<Char>
+
 // Filter rules for Wordle
-fun mustContain(char: Char): (Char) -> Boolean = { char == it }
-fun mustNotContain(char: Char): (Char) -> Boolean = { char != it }
+fun mustContain(char: Char): (Char) -> Boolean = TODO("1")
+fun mustNotContain(char: Char): (Char) -> Boolean = TODO("2")
 
 
 //  
-fun checkCellConstraintsForWord(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean =
-    { word ->
-        val cellConstraints: Vec5<(Char) -> Boolean> =
-            clue.map(Cell::checkCellConstraint)
-        val apply: Vec5<Boolean> = word.apply(cellConstraints)
-        apply.reduce(Boolean::and)
-    }
+fun checkCellConstraintsForWord(clue: Clue): (Word) -> Boolean = TODO("7")
 
 // atLeast('S', 1)(Vec5('S', 'L', 'A', 'T', 'E')) == true
 // atLeast('S', 2)(Vec5('S', 'L', 'A', 'T', 'E')) == false
 // atLeast('S', 1)(Vec5('P', 'L', 'A', 'T', 'E')) == false
-fun atLeast(char: Char, amount: Int): (Vec5<Char>) -> Boolean =
-    { word ->
-        word.asList().count { it == char } >= amount
-    }
+fun atLeast(char: Char, amount: Int): (Word) -> Boolean =
+    { it.asList().count { it == char } >= amount }
 
-fun lessThan(char: Char, amount: Int): (Vec5<Char>) -> Boolean = { word ->
-    word.asList().count { it == char } < amount
-}
+fun lessThan(char: Char, amount: Int): (Word) -> Boolean =
+    { it.asList().count { it == char } < amount }
 
-fun frequency(of:Char, inside: Vec5<Char>): Int = 
+fun frequency(of:Char, inside: Word): Int =
     inside.asList().count { it == of }
 
 
-fun checkPerCellWordConstraint(cell: Cell, clueWord: Vec5<Char>):
-        (Vec5<Char>) -> Boolean = when (cell.color) {
+fun checkPerCellWordConstraint(cell: Cell, clueWord: Word):
+        (Word) -> Boolean = when (cell.color) {
             Color.GREEN, Color.YELLOW -> atLeast(cell.char, frequency(cell.char, clueWord))
             Color.GREY -> lessThan(cell.char, frequency(cell.char, clueWord))
 }
 
-fun checkWordConstraint(clue: Vec5<Cell>): (Vec5<Char>) -> Boolean {
-    val clueWord: Vec5<Char> = clue.map { cell -> cell.char }
-    return clue.map { checkPerCellWordConstraint(it, clueWord) }
-        .reduce { a, b -> a + b}
-}
-
-// utility method
-operator fun <A> ((A) -> Boolean).plus(other: (A) -> Boolean): (A) -> Boolean =
-    { this(it) && other(it) }
+fun checkWordConstraint(clue: Clue): (Word) -> Boolean =
+    clue
+        .map { checkPerCellWordConstraint(
+            it,
+            clue.map { cell -> cell.char }
+        ) }
+        .reduce { a, b -> { a(it) && b(it) } }
 
 fun yellow(char: Char) = Cell(Color.YELLOW, char)
 fun grey(char: Char) = Cell(Color.GREY, char)
 fun green(char: Char) = Cell(Color.GREEN, char)
 
 
-typealias Clue = Vec5<Cell>
+fun makeRuleFromClue(clue: Clue): (Word) -> Boolean =
+    { checkCellConstraintsForWord(clue)(it) && checkWordConstraint(clue)(it) }
 
-fun makeRuleFromClue(clue: Clue): (Vec5<Char>) -> Boolean =
-    checkCellConstraintsForWord(clue) + checkWordConstraint(clue)
-
-fun makeRulesFromClues(clues: List<Clue>): (Vec5<Char>) -> Boolean = clues
+fun makeRulesFromClues(clues: List<Clue>): (Word) -> Boolean = clues
     .map(::makeRuleFromClue)
-    .reduce { a, b -> a.plus(b) }
+    .reduce { a, b -> { a(it) && b(it) } }
 
 val clues: List<Clue> = listOf(
     Vec5(grey('S'), grey('L'), yellow('A'), grey('T'), grey('E')),
@@ -67,7 +58,7 @@ val clues: List<Clue> = listOf(
 )
 
 fun main() {
-    val words: List<Vec5<Char>> = File("words.txt")
+    val words: List<Word> = File("words.txt")
         .readLines()
         .map(String::uppercase)
         .map {
@@ -75,8 +66,8 @@ fun main() {
         }
 
 
-    val rules: (Vec5<Char>) -> Boolean = makeRulesFromClues(clues)
-    val checkedWords: List<Vec5<Char>> = words.filter(rules)
+    val rules: (Word) -> Boolean = makeRulesFromClues(clues)
+    val checkedWords: List<Word> = words.filter(rules)
     val wordsToPrint: List<String> = checkedWords
         .shuffled()
         .take(5)
