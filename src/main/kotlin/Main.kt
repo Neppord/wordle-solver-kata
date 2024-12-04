@@ -5,12 +5,15 @@ typealias Clue = Vec5<Cell>
 typealias Word = Vec5<Char>
 
 // Filter rules for Wordle
-fun mustContain(char: Char): (Char) -> Boolean = TODO("1")
-fun mustNotContain(char: Char): (Char) -> Boolean = TODO("2")
+fun mustContain(char: Char): (Char) -> Boolean = {it == char}
+fun mustNotContain(char: Char): (Char) -> Boolean = {it != char}
 
 
 //  
-fun checkCellConstraintsForWord(clue: Clue): (Word) -> Boolean = TODO("7")
+fun checkCellConstraintsForWord(clue: Clue): (Word) -> Boolean = { word ->
+    val clueCellPredicates = clue.map { cell -> cell.checkCellConstraint() }
+    !word.apply(clueCellPredicates).contains(false)
+}
 
 // atLeast('S', 1)(Vec5('S', 'L', 'A', 'T', 'E')) == true
 // atLeast('S', 2)(Vec5('S', 'L', 'A', 'T', 'E')) == false
@@ -54,7 +57,7 @@ fun makeRulesFromClues(clues: List<Clue>): (Word) -> Boolean = clues
 val clues: List<Clue> = listOf(
     Vec5(grey('S'), grey('L'), yellow('A'), grey('T'), grey('E')),
     Vec5(grey('P'), green('A'), grey('G'), green('R'), yellow('I')),
-    Vec5(grey('D'), green('A'), green('I'), green('R'), green('Y')),
+    //Vec5(grey('D'), green('A'), green('I'), green('R'), green('Y')),
 )
 
 fun main() {

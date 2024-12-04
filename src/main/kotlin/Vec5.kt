@@ -7,10 +7,17 @@ data class Vec5<A>(
 ) {
     constructor(item: A) : this(item, item, item, item, item)
 
-    fun <B> map(f: (A) -> B): Vec5<B> = TODO("5")
-    fun <B> apply(f: Vec5<(A) -> B>): Vec5<B> = TODO("6")
+    fun <B> map(f: (A) -> B): Vec5<B> = Vec5(f(item1), f(item2), f(item3), f(item4), f(item5))
+    fun <B> apply(functions: Vec5<(A) -> B>): Vec5<B> = Vec5(
+        functions.item1(item1),
+        functions.item2(item2),
+        functions.item3(item3),
+        functions.item4(item4),
+        functions.item5(item5)
+    )
 
     fun asList() = listOf(item1, item2, item3, item4, item5)
     
     fun reduce(f:(A, A) -> A) = asList().reduce(f)
+    fun contains(value:A) = asList().contains(value)
 }
